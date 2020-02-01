@@ -7,7 +7,7 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon was written from
 * Compile with ./compile.sh
 * Test by running ./test/test
 * Run the example with ./test/example
-* Check out the code in test/example.c to learn how to use the library.
+* Check out the code in [test/example.c](https://github.com/KoinKeep/BitcoinSpoon/blob/master/test/example.c) to learn how to use the library.
 
 ## Getting Started
 
