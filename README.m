@@ -2,7 +2,7 @@
 
 Bitcoin Spoon is a lightweight library for managing Bitcoin transactions that has minimal dependencies.
 
-Why Bitcoin Spoon? Because it's not a fork! Bitcoin Spoon:
+Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
 
 * does not fork the Bitcoin blockchain, because it operates on the main Bitcoin blockhain
 * does not fork the main Bitcoin codebase, because it was written from scratch (to run on more limited hardward)
