@@ -34,7 +34,7 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
 * `database = DatabaseNew()`
 * `#include "NodeManager.h"`
 * `NodeManager = NodeManagerNew(walletCreationDate)`
-** `walletCreationDate` is a unix timestamp of when this wallet was first created. This limits how far back in the blockchain we will scan.
+*  `walletCreationDate` is a unix timestamp of when this wallet was first created. This limits how far back in the blockchain we will scan.
 * `NodeManager.testnet = (int)testnet // 1 for testnet, 0 for mainnet`
 
 ### Your program must have a main loop. That main loop needs to call out to a few things repeatedly on some form of "main thread". Those things are:
@@ -49,11 +49,11 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
 
 ### Connecting to the Bitcoin network
 * `NodeManagerConnectNodes(&NodeManager)`
-** This will connect to 8 nodes and peridocially replace node connections with new ones.
+*  This will connect to 8 nodes and peridocially replace node connections with new ones.
 
 ## Generate master key
 * If `KMMasterPrivKey(&km).bytes == NULL`, then generate the master private key
-** `KMGenerateMasterPrivKey(&km)`
+*  `KMGenerateMasterPrivKey(&km)`
 
 ## Listing accounts
 * `KMNamedKeyCount(&km)`
@@ -64,7 +64,7 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
 
 ## Listing vaults
 * `KMVaultNames(&km)`
-** Indicies are consistent amount vault retrieval methods
+*  Indicies are consistent amount vault retrieval methods
 
 ## Adding vault
 * TBD
@@ -75,13 +75,13 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
 * `hdWalletData = TTUnusedWallet(tracker, hdWalletData, (unsigned int)0) // Increment 0 to get lookahead addresses`
 * `Data pubKey = pubKeyFromHdWallet(hdWalletData)`
 * `String address = p2pkhAddress(pubKey)`
-** Or, for testnet: `String address = p2pkhAddressTestNet(pubKey)`
+*  Or, for testnet: `String address = p2pkhAddressTestNet(pubKey)`
 
 ## Getting transactions (After blockchain has synced)
 * `TransactionAnalyzer ta = TTAnalyzerFor(tracker, KMHdWalletIndex(&km, (uint32_t)walletIndex))`
 * `TATotalBalance(&ta)`
 * `Datas/*TAEvent*/ events = TAEvents(&ta, (TAEventType)typeMask)`
-** Some options for typeMask:
+*  Some options for typeMask:
 ```
 typedef enum {
     TAEventTypeDeposit = 1,
@@ -100,14 +100,14 @@ typedef enum {
 * `TAPaymentCandidate paymentCandidate = TAPaymentCandidateSearch(&ta, (Datas/*TAEvent*/)events)`
 * `TAPaymentCandidateRemainder(&paymentCandidate)`
 * If you want to keep a `TransactionAnalyzer` for longer than one loop, you must:
-** `DataUntrack(ta)` to capture it, and later,
-** `DataTrack(ta)` when you are done with it.
+*  `DataUntrack(ta)` to capture it, and later,
+*  `DataTrack(ta)` when you are done with it.
 
 ## Making a transaction
 * `Transaction trans = TransactionEmpty()`
 * `Data outputScript = addressToPubScript((String)destinationAddress)`
-** You should *always* verify the outputScript matches the destinationAddress to prevent funds being permanently lost
-** `if(!DataEqual(pubScriptToAddress(outputScript), destinationAddress)) abort()`
+*  You should *always* verify the outputScript matches the destinationAddress to prevent funds being permanently lost
+*  `if(!DataEqual(pubScriptToAddress(outputScript), destinationAddress)) abort()`
 * `TTAddOutput(outputScript, (uint64_t)amount) // amount is in satoshies`
 * You should already have a `TransactionAnalyzer ta` from above
 * `Datas/*TAEvent*/ unspents = TAEvents(&ta, TAEventTypeUnspent)`
@@ -123,9 +123,9 @@ typedef enum {
 * `Data hdWalletData = KMHdWalletIndex(&km, (uint32_t)index) // This will be used for change & signing`
 * `Data hdWalletData = hdWallet(hdWalletData, "0'")`
 * If we have change in `payment.remainder` (which we almost always will), then we must make an output back to ourselves as change
-** `Data changeWallet = TTUnusedWallet(hdWallet(hdWalletData, "1"), (unsigned int)0)`
-** `Data changePubScript = p2wpkhPubScriptFromPubKey(pubKeyFromHdWallet(changeWallet))`
-** `trans = TransactionAddOutput(trans, changePubScript, payment.remainder)`
+*  `Data changeWallet = TTUnusedWallet(hdWallet(hdWalletData, "1"), (unsigned int)0)`
+*  `Data changePubScript = p2wpkhPubScriptFromPubKey(pubKeyFromHdWallet(changeWallet))`
+*  `trans = TransactionAddOutput(trans, changePubScript, payment.remainder)`
 * Now we sign the transaction
 * `Datas hdWallets = TTAllActiveDerivations(hdWallet(hdWalletData, "0")) // all primary wallets`
 * `hdWallets = DatasAddDatasCopy(hdWallets, TTAllActiveDerivations(hdWallet(hdWalletData, "1"))) // all change wallets`
