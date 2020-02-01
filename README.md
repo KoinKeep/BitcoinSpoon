@@ -4,6 +4,11 @@ Bitcoin Spoon is a lightweight library for managing Bitcoin transactions that ha
 
 Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon was written from scratch to run on more limited hardware.
 
+* Compile with ./compile.sh
+* Test by running ./test/test
+* Run the example with ./test/example
+* Check out the code in test/example.c to learn how to use the library.
+
 ## Getting Started
 
 ### Optionally you may initialize these items. If you initialize them, they must be done first
