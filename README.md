@@ -41,7 +41,7 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon was written from
 
 ### Your program must have a main loop. That main loop needs to call out to a few things repeatedly on some form of "main thread". Those things are:
 * Each loop must start with `DataTrackPush()` and end with `DataTrackPop()`
-** This enables semi-automatic memory tracking during the loop, freeing objects during `DataTrackPop`.
+*  This enables semi-automatic memory tracking during the loop, freeing objects during `DataTrackPop`.
 * `#include "Notifications.h"`
 * `NotificationsProcess()`
 * `#include "NodeManager.h"`
