@@ -82,7 +82,8 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
 * `TATotalBalance(&ta)`
 * `Datas/*TAEvent*/ events = TAEvents(&ta, (TAEventType)typeMask)`
 ** Some options for typeMask:
-```typedef enum {
+```
+typedef enum {
     TAEventTypeDeposit = 1,
     TAEventTypeWithdrawl = 2,
     TAEventTypeChange = 4,
@@ -92,7 +93,8 @@ Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon:
     TAEventBalanceMask = TAEventTypeDeposit | TAEventTypeWithdrawl,
     TAEventChangeMask = TAEventTypeChange,
     TAEventAllMask = TAEventBalanceMask | TAEventChangeMask | TAEventTypeUnspent,
-} TAEventType;```
+} TAEventType;
+```
 * `TAAnalyzerForTransactionsMatching(&ta, custom_filter)`
 * `TATotalAmount((Datas/*TAEvent*/)events)`
 * `TAPaymentCandidate paymentCandidate = TAPaymentCandidateSearch(&ta, (Datas/*TAEvent*/)events)`
