@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1130"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "587B059C23DF794000FB8B77"
+               BuildableName = "bitcoinSpoon"
+               BlueprintName = "bitcoinSpoon"
+               ReferencedContainer = "container:BitcoinSpoon.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableAddressSanitizer = "YES"
+      enableASanStackUseAfterReturn = "YES"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "587B059C23DF794000FB8B77"
+            BuildableName = "bitcoinSpoon"
+            BlueprintName = "bitcoinSpoon"
+            ReferencedContainer = "container:BitcoinSpoon.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-lookaheadCount 15"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-testnet"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-node"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-walletCreationTime 1579094880"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-a bc1qw94af0dcz7t6hk2ndpzwu6cda3t6vsefm5frxs"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-xpubRemove &quot;Phone Wallet 1&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-address bc1qs5z9ty7p5t8zf8ppmcm27dwwp86endwkua8l0rx5hnxun0nqfv7sl4tv5q"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-address bc1q89xk0cuh5n2dfurs5ncaq6d699esunh8qqmvfu"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-address 16DzFBiWg5ozd92LDEru5GCTZmVwcDHHFv"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-scriptVault &quot;Personal Vault[1/2],Personal Vault[2/2]&quot; -scriptName &quot;Personal Vault&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-listScripts"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-xpub xpub6DDpUQbZNypFjfd5EGeGvJdDUmTFqK3x3LcVBRj3nc6zfcJfWo9JGvPeeA8fXpRg1QANtwRfjAVCKhpC4bWy3AeHxXfDYyKvM5r9DAjoaF6 -xpubName &quot;Phone Wallet 1&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-xpub xpub6DDpUQbZNypFo7ALmfTSpQLDpXw9LvbsxtCxhxQdwzHFJzPpZ2W3DhfgAScdW8kXpG3NCQsuqqEPErxg32cy5GAWemgJHm5yQXDcP5f38DL -xpubName &quot;Personal Vault[1/2]&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-xpub xpub6BemYiVEULcbprgfAnDXjNheBpVpLND7uZAaXZxEQh1Unk8dAUmX1Z6ECUjPpautyC5pSaxMoeCa2sc6ML2Dpit9ufYye5NdxLAUiixEfN8 -xpubName &quot;Personal Vault[2/2]&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-listxPubs"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-tx 02000000000101e6fee929628839ef215723e60c368cffd96805b93a0cd8b8539abe4a24c030ca010000000000000000023629000000000000160014273c2fa6875e93b40af5081605d508f7f726974ebfd40100000000001600145d145bc068c01ef295d7ad775852b949231184cd0248304502210086d7c26a106068c856af3538b40d10bdd7b69edb4ea14b7209273a8b58e0482f02206260c46bd03a836885ae0e305fec9e44fdff1d9eb38fd0e7c1a7da2fd291f56a0121027632cd3575d6ac28128aa5d1eac9167eee92f06a4f004efcdef9a1b502893e0100000000"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-tx 010000000119afd0bc3a654c3af937ec67f753fa9f9806ac46d6b84f3362dc671a0449e7d50000000000ffffffff024905020000000000160014987211ba9f3684c51c57841bfff316c1b612af7509301800000000001600148842945c0f057d09cbfdfd898a5b15d254b5580d6a5f0900"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-aftx 02000000000101101b9492fb5a5f6aecc9ba8da71eb680b86b61e91f3ada0f5ec3639a90407adf0100000000feffffff026c361a0000000000160014cc9cb419157887286c11f2331b2bbd51ae34494868fe03000000000017a914f531f4d41989d55c15e62fb525b1421e7c572127870247304402206bafd0bcf32a5e0b9bfe869649359d292484e06e3fd10fa31f7699b5a68a73c502203b87014c096e2c18bdb00e471faef6d6286eeb9c937ae97967c508fd1020436f01210216a6bfd3e804aa30ce2f53b8427feeb0e8c503c1680f7f728cdeba9be5c87026c7580900"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-tx 0200000000010166366abbf53f3330b287ce96d33c8ddd0ef67e9897224e7f4b8362cae5099d9000000000000000000002e8030000000000002200202cbc13b4cda5745c3c1e7a9e29612552301910a5b47d27e8ebfa94fb1011a967f2ff0100000000001600149dd221981ab2f11372c6690163377b42177ad4c902483045022100fe1c9de33198e205aee1a23dbe35c3be61a77e21031b6aa52ee0e7cb4a1a37470220038a556d84c2809b7c096d184dc2984046ae4456dada48ccc2c84fbfe49b96720121029e7958a3b12ddf6f712e786563469a5485cab2d6620f3b0860d31c79e0efc03300000000"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
+      <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
+         <AdditionalOption
+            key = "MallocScribble"
+            value = ""
+            isEnabled = "YES">
+         </AdditionalOption>
+      </AdditionalOptions>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "587B059C23DF794000FB8B77"
+            BuildableName = "bitcoinSpoon"
+            BlueprintName = "bitcoinSpoon"
+            ReferencedContainer = "container:BitcoinSpoon.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
