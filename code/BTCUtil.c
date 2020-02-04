@@ -1746,21 +1746,21 @@ Data varIntD(uint64_t number)
 String makeUuid()
 {
 #ifdef __ANDROID__
-    String result = StringNew();
+    String result = StringNew("");
 
     char entropy[16];
 
     arc4random_buf(entropy, 16);
 
-    result = StringAdd(result, toHex(DataCopy(entropy, 4)));
+    result = StringAdd(result, toHex(DataCopy(entropy, 4)).bytes);
     result = StringAdd(result, "-");
-    result = StringAdd(result, toHex(DataCopy(entropy, 2)));
+    result = StringAdd(result, toHex(DataCopy(entropy, 2)).bytes);
     result = StringAdd(result, "-");
-    result = StringAdd(result, toHex(DataCopy(entropy, 2)));
+    result = StringAdd(result, toHex(DataCopy(entropy, 2)).bytes);
     result = StringAdd(result, "-");
-    result = StringAdd(result, toHex(DataCopy(entropy, 2)));
+    result = StringAdd(result, toHex(DataCopy(entropy, 2)).bytes);
     result = StringAdd(result, "-");
-    result = StringAdd(result, toHex(DataCopy(entropy, 6)));
+    result = StringAdd(result, toHex(DataCopy(entropy, 6)).bytes);
 
     return result;
 #else

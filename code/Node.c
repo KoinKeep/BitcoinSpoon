@@ -26,7 +26,9 @@
 #ifdef __ANDROID__
 #include <android/log.h>
 
-#define pthread_cancel(...)
+#define pthread_cancel(thread_id) pthread_kill(thread_id, SIGUSR1);
+#define pthread_setcancelstate(...)
+
 #define printf(...) __android_log_print(ANDROID_LOG_INFO, "Node", __VA_ARGS__)
 
 #endif
