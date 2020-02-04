@@ -17,7 +17,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#if !defined(__ANDROID__)
 #include <uuid/uuid.h>
+#endif
 
 #ifndef MIN
 #define MIN(a,b) (((a)<(b))?(a):(b))
@@ -1742,6 +1745,25 @@ Data varIntD(uint64_t number)
 
 String makeUuid()
 {
+#ifdef __ANDROID__
+    String result = StringNew();
+
+    char entropy[16];
+
+    arc4random_buf(entropy, 16);
+
+    result = StringAdd(result, toHex(DataCopy(entropy, 4)));
+    result = StringAdd(result, "-");
+    result = StringAdd(result, toHex(DataCopy(entropy, 2)));
+    result = StringAdd(result, "-");
+    result = StringAdd(result, toHex(DataCopy(entropy, 2)));
+    result = StringAdd(result, "-");
+    result = StringAdd(result, toHex(DataCopy(entropy, 2)));
+    result = StringAdd(result, "-");
+    result = StringAdd(result, toHex(DataCopy(entropy, 6)));
+
+    return result;
+#else
     uuid_t uuid;
 
     uuid_generate(uuid);
@@ -1751,6 +1773,7 @@ String makeUuid()
     uuid_unparse_upper(uuid, result.bytes);
 
     return result;
+#endif
 }
 
 String toHex(Data data)
