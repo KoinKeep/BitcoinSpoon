@@ -5,7 +5,7 @@
       location = "group:/Users/ddustin/Development/bitcoinspoon/fast_compile.sh">
    </FileRef>
    <FileRef
-      location = "group:README.m">
+      location = "group:README.md">
    </FileRef>
    <FileRef
       location = "group:compile.sh">
