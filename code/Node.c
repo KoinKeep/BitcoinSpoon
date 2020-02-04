@@ -340,7 +340,6 @@ void NodeProcessPackets(Node *self)
 
     if(self->connectThread) {
 
-        pthread_cancel(self->connectThread);
         pthread_join(self->connectThread, NULL);
         self->connectThread = 0;
     }
