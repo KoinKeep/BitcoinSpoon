@@ -207,6 +207,7 @@ void NodeConnect(Node *self)
     if(self->connectThread) {
 
         pthread_cancel(self->connectThread);
+        pthread_join(self->connectThread, NULL);
         self->connectThread = 0;
     }
 
@@ -339,8 +340,8 @@ void NodeProcessPackets(Node *self)
 
     if(self->connectThread) {
 
-        pthread_join(self->connectThread, NULL);
         pthread_cancel(self->connectThread);
+        pthread_join(self->connectThread, NULL);
         self->connectThread = 0;
     }
 
