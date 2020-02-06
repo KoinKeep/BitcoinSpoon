@@ -36,6 +36,7 @@ typedef struct NodeManager {
 
     Datas nodes;
     Node *activeNode;
+    pthread_mutex_t nodesMutex;
 
     int activeConnectionsSinceCheckup;
     int rejectCount;

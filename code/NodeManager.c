@@ -71,6 +71,7 @@ NodeManager NodeManagerNew(uint64_t walletCreationDate)
     NodeManager self = { 0 };
 
     self.nodes = DatasNew();
+    pthread_mutex_init(&self.nodesMutex, NULL);
     self.sendTxOnResults = DatasNew();
     self.blockchainSynced = 0;
     self.walletCreationDate = walletCreationDate;
@@ -84,6 +85,8 @@ void NodeManagerFree(NodeManager *self)
 {
     WorkQueueThreadWaitAndDestroy(TxProcessing);
 
+    pthread_mutex_lock(&self->nodesMutex);
+
     FORIN(Node, node, self->nodes) {
 
         NodeClose(node);
@@ -92,6 +95,10 @@ void NodeManagerFree(NodeManager *self)
     }
 
     DatasFree(self->nodes);
+
+    pthread_mutex_unlock(&self->nodesMutex);
+    pthread_mutex_destroy(&self->nodesMutex);
+
     DataFree(self->bloomFilter);
 
     FORIN(Dict, dict, self->sendTxOnResults)
@@ -222,17 +229,25 @@ int NodeManagerConnections(NodeManager *self)
 {
     int result = 0;
 
+    pthread_mutex_lock(&self->nodesMutex);
+
     FORIN(Node, node, self->nodes)
         if(node->connected)
             result++;
+
+    pthread_mutex_unlock(&self->nodesMutex);
 
     return result;
 }
 
 void NodeManagerProcessNodes(NodeManager *self)
 {
+    pthread_mutex_lock(&self->nodesMutex);
+
     FORIN(Node, node, self->nodes)
         NodeProcessPackets(node);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 
     WorkQueueExecuteAll(&self->workQueue);
 }
@@ -252,6 +267,8 @@ void setBloomFilter(NodeManager *self, Data bloomFilter)
     DataTrack(self->bloomFilter);
     self->bloomFilter = DataUntrack(DataCopyData(bloomFilter));
 
+    pthread_mutex_lock(&self->nodesMutex);
+
     FORIN(Node, node, self->nodes)
         if(node->curBloomFilter.bytes && !DataEqual(node->curBloomFilter, bloomFilter))
             NodeFilterClear(node);
@@ -259,6 +276,8 @@ void setBloomFilter(NodeManager *self, Data bloomFilter)
     FORIN(Node, node, self->nodes)
         if(!node->curBloomFilter.bytes)
             NodeFilterLoad(node, self->bloomFilter);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 Datas blockIndicatorHashes(NodeManager *self)
@@ -286,6 +305,8 @@ static Datas connectedNodes(NodeManager *self)
 {
     Datas result = DatasNew();
 
+    pthread_mutex_lock(&self->nodesMutex);
+
     for(int i = 0; i < self->nodes.count; i++) {
 
         Data data = DatasIndex(self->nodes, i);
@@ -294,16 +315,23 @@ static Datas connectedNodes(NodeManager *self)
             result = DatasAddRef(result, data);
     }
 
+    pthread_mutex_unlock(&self->nodesMutex);
+
     return result;
 }
 
 static void changeActiveNode(NodeManager *self)
 {
+    pthread_mutex_lock(&self->nodesMutex);
+
     BTCUtilAssert(self->nodes.count);
 
     if(self->nodes.count == 1) {
 
         printf("changeActiveNode: Only 1 node left! Can't cycle active node\n");
+
+        pthread_mutex_unlock(&self->nodesMutex);
+
         return;
     }
 
@@ -328,15 +356,21 @@ static void changeActiveNode(NodeManager *self)
         self->activeNode = (Node*)DatasRandom(self->nodes).bytes;
 
     printf("Switched %s to be the active node->%p\n", self->activeNode ? self->activeNode->address.bytes : "", self->activeNode);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static int nodeStillValid(NodeManager *self, Node *node)
 {
     int matchCount = 0;
 
+    pthread_mutex_lock(&self->nodesMutex);
+
     FORIN(Node, nodeItr, self->nodes)
         if(nodeItr == node)
             matchCount++;
+
+    pthread_mutex_unlock(&self->nodesMutex);
 
     // Node was abandoned, we're done here.
     if(!matchCount)
@@ -356,8 +390,13 @@ static void blockHeadersWorkMain(NodeManager *self, Dict dict)
     int addCount = DataGetInt(DictGetS(dict, "addCount"));
     int rejectCount = DataGetInt(DictGetS(dict, "rejectCount"));
 
-    if(!nodeStillValid(self, node))
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
         return;
+    }
     
     node->lastHeadersOrMerkleMessage = time(0);
 
@@ -366,6 +405,9 @@ static void blockHeadersWorkMain(NodeManager *self, Dict dict)
 
         printf("%s got block %s\n", node->address.bytes, toHex(DataFlipEndianCopy(hash)).bytes);
         self->rejectCount = 0;
+
+        pthread_mutex_unlock(&self->nodesMutex);
+
         return;
     }
 
@@ -376,6 +418,8 @@ static void blockHeadersWorkMain(NodeManager *self, Dict dict)
         node->gotFinalHeadersMessage = 1;
 
         requestTransactions(self);
+
+        pthread_mutex_unlock(&self->nodesMutex);
 
         return;
     }
@@ -401,6 +445,8 @@ static void blockHeadersWorkMain(NodeManager *self, Dict dict)
 
     if(wasActive)
         requestHeaders(self, self->activeNode);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void executeFunc(Dict dict)
@@ -497,8 +543,13 @@ static void requestTransactionsWorkerMain(NodeManager *self, Dict dict)
 
     Datas inventoryRequests = DataGetDatas(DictGetS(dict, "inventoryRequests"));
 
-    if(!nodeStillValid(self, node))
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
         return;
+    }
 
     // This used to be on a background thread -- we moved it here to the main thread.
     node->lastDlSize = (int32_t)DataGetInt(DictGetS(dict, "itemCount"));
@@ -506,6 +557,8 @@ static void requestTransactionsWorkerMain(NodeManager *self, Dict dict)
     node->lastDlHeight = DatabaseHeightOf(&database, DictGetS(dict, "lastItem"));
 
     NodeGetData(node, inventoryRequests);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void requestTransactionsWorker(Database *database, Dict dict)
@@ -513,6 +566,14 @@ static void requestTransactionsWorker(Database *database, Dict dict)
     NodeManager *self = DataGetPtr(DictGetS(dict, "self"));
     Node *node = DataGetPtr(DictGetS(dict, "node"));
     uint32_t walletCreationDate = (uint32_t)DataGetLong(DictGetS(dict, "walletCreationDate"));
+
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
+        return;
+    }
 
     int32_t start = DatabaseHighestBlockBeforeTime(database, walletCreationDate);
 
@@ -543,6 +604,8 @@ static void requestTransactionsWorker(Database *database, Dict dict)
     DictAddS(&dict, "inventoryRequests", DataDatas(inventoryRequests));
 
     NodeManagerExecute(self, requestTransactionsWorkerMain, dict);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void requestTransactions(NodeManager *self)
@@ -551,11 +614,15 @@ static void requestTransactions(NodeManager *self)
 
      if(TTBloomFilterDlHeight(&tracker) >= DatabaseHighestHeight(&database)) {
 
+         pthread_mutex_lock(&self->nodesMutex);
+
          FORIN(Node, node, self->nodes) {
 
              node->lastDlHeight = DatabaseHighestHeight(&database);
              node->lastDlSize = 1;
          }
+
+         pthread_mutex_unlock(&self->nodesMutex);
 
          printf("All transactions are up to date!\n");
         
@@ -588,10 +655,17 @@ static void requestHeadersWorkerMain(NodeManager *self, Dict dict)
 
     DictRemoveS(&dict, "hashes");
 
-    if(!nodeStillValid(self, node))
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
         return;
+    }
 
     NodeGetHeaders(node, hashes, DataNull());
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void requestHeadersWorker(Database *database, Dict dict)
@@ -690,8 +764,13 @@ static void txWorkerMain(Dict dict)
     Node *node = DataGetPtr(DictGetS(dict, "node"));
     int32_t height = (int32_t)DataGetLong(DictGetS(dict, "height"));
 
-    if(!nodeStillValid(self, node))
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
         return;
+    }
 
     node->transactionsSinceLastMerkleBlock = node->transactionsSinceLastMerkleBlock + 1;
 
@@ -706,6 +785,8 @@ static void txWorkerMain(Dict dict)
                 requestTransactions(self);
         }
     }
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void txWorker(Dict dict)
@@ -714,6 +795,14 @@ static void txWorker(Dict dict)
     Node *node = DataGetPtr(DictGetS(dict, "node"));
     Data txData = DictGetS(dict, "txData");
     Data blockData = DictGetS(dict, "blockData");
+
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
+        return;
+    }
 
     Transaction trans = TransactionNew(txData);
     MerkleBlock block = MerkleBlockNew(blockData);
@@ -790,6 +879,8 @@ static void txWorker(Dict dict)
     }
 
     MerkleBlockFree(&block);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void tx(struct Node *node, Data txUnsafe)
@@ -915,6 +1006,8 @@ static void setActiveNodeIfNone(Dict parm)
     if(self->activeNode)
         return;
 
+    pthread_mutex_lock(&self->nodesMutex);
+
     self->activeNode = (Node*)DatasRandom(connectedNodes(self)).bytes;
 
     if(!self->activeNode)
@@ -924,6 +1017,8 @@ static void setActiveNodeIfNone(Dict parm)
 
     if(self->automaticallyPublishWaitingTransactions)
         publishedWaitingTransactions(self);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 void NodeManagerSendTx(NodeManager *self, Transaction tx, SendTxResult onResult, void *ptr)
@@ -933,6 +1028,8 @@ void NodeManagerSendTx(NodeManager *self, Transaction tx, SendTxResult onResult,
     TTAddTransaction(&tracker, TransactionData(tx));
     DatabaseAddTransaction(&database, TransactionData(tx), NULL);
     updateTransactionFees(DictNew());
+
+    pthread_mutex_lock(&self->nodesMutex);
 
     // Special case "send all" transactions -- add them to the bloom filter
     if(tx.outputs.count == 1) {
@@ -967,6 +1064,8 @@ void NodeManagerSendTx(NodeManager *self, Transaction tx, SendTxResult onResult,
 
         self->sendTxOnResults = DatasUntrack(DatasAddRef(self->sendTxOnResults, DataDict(dict)));
     }
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static void messageWorkerDelayed(Dict parm)
@@ -975,8 +1074,13 @@ static void messageWorkerDelayed(Dict parm)
     Node *node = DataGetPtr(DictGetS(parm, "node"));
     NodeManagerErrorType rejectCode = DataGetInt(DictGetS(parm, "rejectCode"));
 
-    if(!nodeStillValid(self, node))
+    pthread_mutex_lock(&self->nodesMutex);
+
+    if(!nodeStillValid(self, node)) {
+
+        pthread_mutex_unlock(&self->nodesMutex);
         return;
+    }
 
     for(int i = 0; i < self->sendTxOnResults.count; i++) {
 
@@ -1006,6 +1110,8 @@ static void messageWorkerDelayed(Dict parm)
         if(onResult)
             onResult(rejectCode, ptr);
     }
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 static int message(struct Node *node, String message, char rejectCode, String reason, Data data)
@@ -1053,6 +1159,8 @@ void NodeManagerConnectNodes(NodeManager *self)
         DataTrack(self->bloomFilter);
         self->bloomFilter = DataUntrack(TTBloomFilter(&tracker));
     }
+
+    pthread_mutex_lock(&self->nodesMutex);
 
     Datas nodeList = masterNodeList(self);
 
@@ -1109,6 +1217,8 @@ void NodeManagerConnectNodes(NodeManager *self)
             NodeFilterLoad(nodePtr, self->bloomFilter);
     }
 
+    pthread_mutex_unlock(&self->nodesMutex);
+
     WorkQueueRemoveByFunction(&self->workQueue, setActiveNodeIfNone);
     WorkQueueAddDelayed(&self->workQueue, setActiveNodeIfNone, DictOneS("self", DataPtr(self)), NODE_INITIAL_DL_DELAY * 1000);
 
@@ -1158,6 +1268,8 @@ static void bloomFilterCheckup(Dict dict)
 static void nodeCheckup(Dict dict)
 {
     NodeManager *self = DataGetPtr(DictGetS(dict, "self"));
+
+    pthread_mutex_lock(&self->nodesMutex);
 
     int originalCount = (int)self->nodes.count;
 
@@ -1291,15 +1403,21 @@ static void nodeCheckup(Dict dict)
 
         FORDATAIN(data, nodePtrs) {
 
+            pthread_mutex_lock(&self->nodesMutex);
+
             Node *node = DataGetPtr(*data);
 
-            if(node->connected) {
+            if(nodeStillValid(self, node) && node->connected) {
 
                 self->activeNode = node;
                 requestHeaders(self, node);
 
+                pthread_mutex_unlock(&self->nodesMutex);
+
                 break;
             }
+
+            pthread_mutex_unlock(&self->nodesMutex);
         }
     }
 
@@ -1319,10 +1437,14 @@ static void nodeCheckup(Dict dict)
 
     WorkQueueRemoveByFunction(&self->workQueue, bloomFilterCheckup);
     WorkQueueAddDelayed(&self->workQueue, bloomFilterCheckup, DictOneS("self", DataPtr(self)), BLOOMTILER_CHECKUP_INTERVAL * 1000);
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
 
 void NodeManagerDisconnectAll(NodeManager *self)
 {
+    pthread_mutex_lock(&self->nodesMutex);
+
     FORIN(Node, node, self->nodes) {
 
         NodeClose(node);
@@ -1338,4 +1460,6 @@ void NodeManagerDisconnectAll(NodeManager *self)
     WorkQueueRemoveByFunction(&self->workQueue, bloomFilterCheckup);
 
     self->activeConnectionsSinceCheckup = 0;
+
+    pthread_mutex_unlock(&self->nodesMutex);
 }
