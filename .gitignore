@@ -6,3 +6,4 @@ Mac/BitcoinSpoon.xcodeproj/project.xcworkspace/xcuserdata
 /Mac/BitcoinSpoon.xcodeproj/xcuserdata
 /libraries/objects/__.SYMDEF SORTED
 /Untitled.xcworkspace/xcuserdata
+libraries/secp256k1/src/*.o.tmp
