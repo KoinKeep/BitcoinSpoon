@@ -674,6 +674,73 @@ int64_t KMIndexForKeyNamed(KeyManager *self, String name)
 	return -1;
 }
 
+static const char *multisigObjectsKey = @"multisigObjectsKey";
+static const char *multisigObjectsKeyTestNet = @"multisigObjectsKeyTestNet";
+static const char *multisigObjectNameKey = @"multisigObjectNameKey";
+static const char *multisigObjectWalletsKey = @"multisigObjectWalletsKey";
+
+void KMAddMultisig(KeyManager *self, Datas hdWallets, String name)
+{
+    hdWallets = DatasCopy(hdWallets);
+
+    Datas array = DatasDeserialize(bsLoad(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey));
+
+    Dict info = DictNew();
+
+    DictAddS(&info, multisigObjectNameKey, name);
+    DictAddS(&info, multisigObjectWalletsKey, DatasSerialize(hdWallets));
+
+    array = DatasAddCopy(array, DictSerialize(info));
+
+    bsSave(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey, DatasSerialize(array));
+}
+
+void KMRemoveMultisig(KeyManager *self, uint32_t index)
+{
+    Datas array = DatasDeserialize(bsLoad(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey));
+
+    if(index < array.count)
+        array = DatasRemoveIndeX(array, index);
+
+    bsSave(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey, DatasSerialize(array));
+}
+
+Datas/*Datas[Data]*/ KMMultisigHdWallets(KeyManager *self)
+{
+    Datas result = DatasNew();
+
+    Datas array = DatasDeserialize(bsLoad(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey));
+
+    FORDATAIN(data, array)
+        result = DatasAddCopy(result, DictGetS(DictDeserialize(*data), multisigObjectWalletsKey));
+
+    return result;
+}
+
+Datas/*String*/ KMMultisigNames(KeyManager *self)
+{
+    Datas result = DatasNew();
+
+    Datas array = DatasDeserialize(bsLoad(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey));
+
+    FORDATAIN(data, array)
+        result = DatasAddCopy(result, DictGetS(DictDeserialize(*data), multisigObjectNameKey));
+
+    return result;
+}
+
+Data KMMultisigScript(KeyManager *self, uint32_t index, String derivation)
+{
+    Datas hdWallets = DatasDeserialize(DatasAt(KMMultisigHdWallets(self), index));
+
+    for(int i = 0; i < hdWallets.count; i++) {
+
+        hdWallets = DatasReplaceIndexCopy(hdWallets, i, hdWallet(hdWallets.ptr[i], derivation.bytes));
+    }
+
+    return multisigScript(pubKeysFromHdWallets(hdWallets));
+}
+
 static const char *vaultObjectsKey = "vaultObjectsKey";
 static const char *vaultObjectsKeyTestNet = "vaultObjectsKeyTestNet";
 static const char *vaultObjectNameKey = "vaultObjectNameKey";

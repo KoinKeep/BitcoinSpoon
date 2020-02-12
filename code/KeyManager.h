@@ -116,6 +116,16 @@ Data KMCommKeyUuid(KeyManager *self, String uuid);
 Data KMPrivKeyHashForDevice(KeyManager *self, String uuid);
 void KMSetPrivKeyHashForDevice(KeyManager *self, Data hash, String uuid);
 
+/* Standard multisig */
+
+void KMAddMultisig(KeyManager *self, Datas hdWallets, String name);
+void KMRemoveMultisig(KeyManager *self, uint32_t index);
+
+Datas/*Datas[Data]*/ KMMultisigHdWallets(KeyManager *self);
+Datas/*String*/ KMMultisigNames(KeyManager *self);
+
+Data KMMultisigScript(KeyManager *self, uint32_t index, String derivation);
+
 /* Vault routines */
 
 void KMAddVaultObserver(KeyManager *self, Data masterHdWallet, Datas hdWallets, String name);

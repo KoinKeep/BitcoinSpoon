@@ -1572,6 +1572,29 @@ ScriptTokens allCheckSigs(Data script)
     return DTPopDatas(array);
 }
 
+Data multisigScript(Datas pubKeys)
+{
+    Data data = DataNew();
+
+    data = DatasSort(data, DataCompare);
+
+    long m = pubKeys.count * 2 / 3;
+    long n = pubKeys.count;
+
+    if(m < 1)
+        m = 1;
+
+    data = DataAppend(data, uint8D((OP_1 - 1) + m));
+
+    FORDATAIN(pubKey, pubKeys)
+        data = DataAppend(data, scriptPush(pubKey));
+
+    data = DataAppend(data, uint8D((OP_1 - 1) + n));
+    data = DataAppend(data, uint8D(OP_CHECKMULTISIG));
+
+    return data;
+}
+
 Data vaultScript(Data masterPubKey, Datas pubKeys)
 {
     DataTrackPush();

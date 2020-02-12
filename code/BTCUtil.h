@@ -144,6 +144,8 @@ Datas allPubKeys(Data script);
 // Returns all checksig / multisig ops
 ScriptTokens allCheckSigs(Data script);
 
+Data multisigScript(Datas pubKeys);
+
 Data vaultScript(Data masterPubKey, Datas pubKeys);
 
 // Segwit address in bech32 format
