@@ -1574,9 +1574,9 @@ ScriptTokens allCheckSigs(Data script)
 
 Data multisigScript(Datas pubKeys)
 {
-    Data data = DataNew();
+    Data data = DataNew(0);
 
-    data = DatasSort(data, DataCompare);
+    pubKeys = DatasSort(pubKeys, DataCompare);
 
     long m = pubKeys.count * 2 / 3;
     long n = pubKeys.count;
@@ -1587,7 +1587,7 @@ Data multisigScript(Datas pubKeys)
     data = DataAppend(data, uint8D((OP_1 - 1) + m));
 
     FORDATAIN(pubKey, pubKeys)
-        data = DataAppend(data, scriptPush(pubKey));
+        data = DataAppend(data, scriptPush(*pubKey));
 
     data = DataAppend(data, uint8D((OP_1 - 1) + n));
     data = DataAppend(data, uint8D(OP_CHECKMULTISIG));

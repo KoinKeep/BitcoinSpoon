@@ -674,10 +674,10 @@ int64_t KMIndexForKeyNamed(KeyManager *self, String name)
 	return -1;
 }
 
-static const char *multisigObjectsKey = @"multisigObjectsKey";
-static const char *multisigObjectsKeyTestNet = @"multisigObjectsKeyTestNet";
-static const char *multisigObjectNameKey = @"multisigObjectNameKey";
-static const char *multisigObjectWalletsKey = @"multisigObjectWalletsKey";
+static const char *multisigObjectsKey = "multisigObjectsKey";
+static const char *multisigObjectsKeyTestNet = "multisigObjectsKeyTestNet";
+static const char *multisigObjectNameKey = "multisigObjectNameKey";
+static const char *multisigObjectWalletsKey = "multisigObjectWalletsKey";
 
 void KMAddMultisig(KeyManager *self, Datas hdWallets, String name)
 {
@@ -700,7 +700,7 @@ void KMRemoveMultisig(KeyManager *self, uint32_t index)
     Datas array = DatasDeserialize(bsLoad(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey));
 
     if(index < array.count)
-        array = DatasRemoveIndeX(array, index);
+        array = DatasRemoveIndex(array, index);
 
     bsSave(self->testnet ? multisigObjectsKeyTestNet : multisigObjectsKey, DatasSerialize(array));
 }
