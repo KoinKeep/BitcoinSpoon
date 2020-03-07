@@ -2353,6 +2353,8 @@ void testJimmyScript()
     Data jimmyPub = fromHex("0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
     Data receiverPrivate = sha256(fromHex("12345678901234567890"));
     Data receiverPub = pubKey(receiverPrivate);
+
+    AssertTrue(validPublicKey(jimmyPub));
     
     Data witnessScript = jimmyScript(jimmyPub, receiverPub, 620560);
 

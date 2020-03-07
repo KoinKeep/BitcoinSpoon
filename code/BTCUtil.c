@@ -1665,7 +1665,7 @@ Data jimmyScript(Data jimmyPubKey, Data receiverPubKey, uint32_t currentBlockHei
 
     const int sixMonths = 25920;
 
-    data = DataAdd(data, encodeScriptNum(currentBlockHeight + sixMonths));
+    data = DataAdd(data, scriptPush(encodeScriptNum(currentBlockHeight + sixMonths)));
     data = DataAdd(data, uint8D(OP_CHECKLOCKTIMEVERIFY));
     data = DataAdd(data, uint8D(OP_DROP));
 
@@ -1678,7 +1678,7 @@ Data jimmyScript(Data jimmyPubKey, Data receiverPubKey, uint32_t currentBlockHei
 
     data = DataAdd(data, uint8D(OP_ELSE));
 
-    data = DataAdd(data, encodeScriptNum(currentBlockHeight + sixMonths * 3));
+    data = DataAdd(data, scriptPush(encodeScriptNum(currentBlockHeight + sixMonths * 3)));
     data = DataAdd(data, uint8D(OP_CHECKLOCKTIMEVERIFY));
     data = DataAdd(data, uint8D(OP_DROP));
 
