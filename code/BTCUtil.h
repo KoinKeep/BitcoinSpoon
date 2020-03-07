@@ -148,6 +148,10 @@ Data multisigScript(Datas pubKeys);
 
 Data vaultScript(Data masterPubKey, Datas pubKeys);
 
+Data encodeScriptNum(int64_t value);
+
+Data jimmyScript(Data jimmyPubKey, Data receiverPubKey, uint32_t currentBlockHeight);
+
 // Segwit address in bech32 format
 String toSegwit(Data program, const char *prefix);
 Data fromSegwit(String string);

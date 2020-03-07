@@ -59,7 +59,7 @@ do { if((condition) != (value)) { \
     abort(); } \
 } while(0)
 
-void testBasicStorage(); void testWorkQueueSimple(); void testWorkQueue(); void testWorkQueueThreading(); void testStringComponents(); void testDictionary(); void testData(); void testDatas(); void testHex(); void testRipemd160(); void testHexEncoding(); void testTransactionParsing(); void testSignatures(); void testSegwitSigningExample(); void testSegwitAddresses(); void testSegwitAddressCreation(); void testp2pkhTransaction(); void testp2shTransaction(); void testp2wpkTransaction(); void testp2wshTransaction(); void testInputTypeTest(); void testPubKeySearch(); void testMultisigSearch(); void testEasySign(); void testRemoteSign(); void testSecpDiffie(); void testSecpAdd(); void testDataPadding(); void testEncryptedMessage(); void testTweak(); void testMnemonic(); void testSha(); void testHmacShaBasic(); void testHmacSha(); void testBip39tests(); void testManualHdWallet(); void testHdWallet(); void testHdWalletVector1(); void testHdWalletVector3(); void testBloomFilters(); void testTxSort(); void testBip174(); void testAddressParsing(); void testDecryptBip38(); void testManaulNodeConnection();
+void testBasicStorage(); void testWorkQueueSimple(); void testWorkQueue(); void testWorkQueueThreading(); void testStringComponents(); void testDictionary(); void testData(); void testDatas(); void testHex(); void testRipemd160(); void testHexEncoding(); void testTransactionParsing(); void testSignatures(); void testSegwitSigningExample(); void testSegwitAddresses(); void testSegwitAddressCreation(); void testp2pkhTransaction(); void testp2shTransaction(); void testp2wpkTransaction(); void testp2wshTransaction(); void testInputTypeTest(); void testPubKeySearch(); void testMultisigSearch(); void testEasySign(); void testRemoteSign(); void testSecpDiffie(); void testSecpAdd(); void testDataPadding(); void testEncryptedMessage(); void testTweak(); void testMnemonic(); void testSha(); void testHmacShaBasic(); void testHmacSha(); void testBip39tests(); void testManualHdWallet(); void testHdWallet(); void testHdWalletVector1(); void testHdWalletVector3(); void testBloomFilters(); void testTxSort(); void testBip174(); void testAddressParsing(); void testDecryptBip38(); void testManaulNodeConnection(); void testJimmyScript();
 
 struct {
     void (*testFunction)();
@@ -114,7 +114,8 @@ struct {
 #ifdef TEST_MANUAL_NODE_CONNECTION
      { testManaulNodeConnection, "testManaulNodeConnection" },
 #endif
-    { NULL, NULL, }
+     { testJimmyScript, "testJimmyScript" },
+     { NULL, NULL, }
 };
 
 void testBasicStorage()
@@ -2345,6 +2346,21 @@ void testManaulNodeConnection()
 
     NodeClose(&node);
     NodeFree(&node);
+}
+
+void testJimmyScript()
+{
+    Data jimmyPub = fromHex("0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798");
+    Data receiverPrivate = sha256(fromHex("12345678901234567890"));
+    Data receiverPub = pubKey(receiverPrivate);
+    
+    Data witnessScript = jimmyScript(jimmyPub, receiverPub, 620560);
+
+    String address = p2wshAddressTestNet(witnessScript);
+
+    printf("Witness script: %s\n", toHex(witnessScript).bytes);
+
+    printf("Address: %s\n", address.bytes);
 }
 
 int main()

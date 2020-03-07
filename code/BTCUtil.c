@@ -1623,6 +1623,73 @@ Data vaultScript(Data masterPubKey, Datas pubKeys)
     return DTPop(data);
 }
 
+Data encodeScriptNum(int64_t value)
+{
+    Data result = DataNew(0);
+
+    if(value == 0)
+        return result;
+
+    int neg = value < 0;
+    uint64_t absvalue = value;
+
+    while(absvalue) {
+
+        result = DataAppend(result, uint8D(absvalue & 0xff));
+        absvalue >>= 8;
+    }
+
+    //    - If the most significant byte is >= 0x80 and the value is positive, push a
+    //    new zero-byte to make the significant byte < 0x80 again.
+
+    //    - If the most significant byte is >= 0x80 and the value is negative, push a
+    //    new 0x80 byte that will be popped off when converting to an integral.
+
+    //    - If the most significant byte is < 0x80 and the value is negative, add
+    //    0x80 to it, since it will be subtracted and interpreted as a negative when
+    //    converting to an integral.
+
+    if(result.bytes[result.length - 1] & 0x80)
+        result = DataAppend(result, uint8D(neg ? 0x80 : 0));
+    else if(neg)
+        result.bytes[result.length - 1] |= 0x80;
+
+    return result;
+}
+
+Data jimmyScript(Data jimmyPubKey, Data receiverPubKey, uint32_t currentBlockHeight)
+{
+    DataTrackPush();
+
+    Data data = DataNew(0);
+
+    const int sixMonths = 25920;
+
+    data = DataAdd(data, encodeScriptNum(currentBlockHeight + sixMonths));
+    data = DataAdd(data, uint8D(OP_CHECKLOCKTIMEVERIFY));
+    data = DataAdd(data, uint8D(OP_DROP));
+
+    data = DataAdd(data, scriptPush(receiverPubKey));
+    data = DataAdd(data, uint8D(OP_CHECKSIG));
+
+    data = DataAdd(data, uint8D(OP_IF));
+
+    data = DataAdd(data, uint8D(OP_1));
+
+    data = DataAdd(data, uint8D(OP_ELSE));
+
+    data = DataAdd(data, encodeScriptNum(currentBlockHeight + sixMonths * 3));
+    data = DataAdd(data, uint8D(OP_CHECKLOCKTIMEVERIFY));
+    data = DataAdd(data, uint8D(OP_DROP));
+
+    data = DataAdd(data, scriptPush(jimmyPubKey));
+    data = DataAdd(data, uint8D(OP_CHECKSIG));
+
+    data = DataAdd(data, uint8D(OP_ENDIF));
+
+    return DTPop(data);
+}
+
 Data nestedP2wpkhScript(Data pubKey)
 {
     DataTrackPush();
