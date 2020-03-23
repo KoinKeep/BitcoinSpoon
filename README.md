@@ -115,13 +115,16 @@ typedef enum {
 * `Datas/*TAEvent*/ unspents = TAEvents(&ta, TAEventTypeUnspent)`
 * `TAPaymentCandidate payment = TAPaymentCandidateSearch((uint64_t)amount + (uint64_t)transactionFee, unspents)`
 * `if(payment.amount < (uint64_t)amount + (uint64_t)transactionFee) abort() // Insufficent funds`
-* ```FORIN(TAEvent, event, payment.events) {
+* 
+```
+FORIN(TAEvent, event, payment.events) {
     Data prevHash = TransactionTxid(event->transaction);
     Data pubScript = TransactionOutputOrNilAt(&event->transaction, event->outputIndex)->script;
     uint64_t value = TransactionOutputOrNilAt(&event->transaction, event->outputIndex)->value;
 
     TransactionAddInput(&trans, prevHash, event->outputIndex, pubScript, value)->sequence = 0;
-}```
+}
+```
 * `Data hdWalletData = KMHdWalletIndex(&km, (uint32_t)index) // This will be used for change & signing`
 * `Data hdWalletData = hdWallet(hdWalletData, "0'")`
 * If we have change in `payment.remainder` (which we almost always will), then we must make an output back to ourselves as change
