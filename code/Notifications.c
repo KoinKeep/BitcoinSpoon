@@ -7,8 +7,9 @@ static struct {
     pthread_once_t once;
     Dict funcs;
     WorkQueue workQueue;
+    Datas/*String*/ queuedNotificationNames;
 
-} note = { PTHREAD_MUTEX_INITIALIZER, PTHREAD_ONCE_INIT, {0}, {0} };
+} note = { PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP, PTHREAD_ONCE_INIT, {0}, {0}, {0} };
 
 static void init()
 {
@@ -21,6 +22,8 @@ void NotificationsFire(const char *name, Dict dict)
     pthread_once(&note.once, init);
 
     pthread_mutex_lock(&note.mutex);
+
+    note.queuedNotificationNames = DatasUntrack(DatasAddCopy(note.queuedNotificationNames, StringNew(name)));
 
     Datas *datas = (Datas*)DictGetS(note.funcs, name).bytes;
 
@@ -50,7 +53,24 @@ void NotificationsAddListener(const char *name, WorkQueueFunc func)
 
 void NotificationsProcess()
 {
+    NotificationsProcessReturningEventNames();
+}
+
+Datas NotificationsProcessReturningEventNames()
+{
     pthread_once(&note.once, init);
 
+    NotificationsProcess();
+
+    pthread_mutex_lock(&note.mutex);
+
     WorkQueueExecuteAll(&note.workQueue);
+
+    Datas result = DatasTrack(note.queuedNotificationNames);
+
+    note.queuedNotificationNames = DatasUntrack(DatasNew());
+
+    pthread_mutex_unlock(&note.mutex);
+
+    return result;
 }

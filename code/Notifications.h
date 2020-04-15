@@ -8,5 +8,6 @@ void NotificationsFire(const char *name, Dict dict);
 void NotificationsAddListener(const char *name, WorkQueueFunc func);
 
 void NotificationsProcess();
+Datas NotificationsProcessReturningEventNames();
 
 #endif
