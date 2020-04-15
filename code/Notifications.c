@@ -60,8 +60,6 @@ Datas NotificationsProcessReturningEventNames()
 {
     pthread_once(&note.once, init);
 
-    NotificationsProcess();
-
     pthread_mutex_lock(&note.mutex);
 
     WorkQueueExecuteAll(&note.workQueue);
