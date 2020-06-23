@@ -476,7 +476,7 @@ Data KMHdWallet(KeyManager *self, uint32_t index)
 
     hash = hmacSha512(seedPhrase, self->mainSeed);
 
-    pthread_mutex_unlock(&privKeyHashCacheMutex);
+    pthread_mutex_unlock(&mainSeedMutex);
 
     Data hdWalletData = DataNull();
 
