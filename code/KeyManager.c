@@ -241,7 +241,7 @@ Data KMPrivKeyAtIndex(KeyManager *self, int index)
 
         char buf[32];
 
-        if(fread(buf, 32, 1, file) == 32)
+        if(fread(buf, 1, 32, file) == 32)
             result = DataCopy(buf, 32);
 
         fclose(file);
