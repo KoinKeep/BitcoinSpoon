@@ -460,7 +460,7 @@ void KMSetTestnet(KeyManager *self, int testnet)
     pthread_mutex_unlock(&privKeyHashCacheMutex);
 }
 
-Data KMHdWallet(KeyManager *self, uint32_t index)
+Data KMHdWalletIndex(KeyManager *self, uint32_t index)
 {
     if(!KMKeyName(self, index).length)
         return DataNull();
@@ -521,7 +521,7 @@ Datas KMAllHdWalletPubRoots(KeyManager *self)
 
     Data hdWalletData;
 
-    for(uint32_t i = 0; (hdWalletData = KMHdWallet(self, i)).length; i++) {
+    for(uint32_t i = 0; (hdWalletData = KMHdWalletIndex(self, i)).length; i++) {
 
         array = DatasAddCopy(array, publicHdWallet(hdWallet(hdWalletData, "0'/0")));
         array = DatasAddCopy(array, publicHdWallet(hdWallet(hdWalletData, "0'/1")));
