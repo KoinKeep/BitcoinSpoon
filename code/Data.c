@@ -1759,6 +1759,18 @@ void DictionaryFree(Dictionary dict)
     DatasFree(dict.keysAndValues);
 }
 
+static String StringMutateEnsureNullByte(String string)
+{
+    if(string.length && 0 == string.bytes[string.length - 1])
+        return string;
+    
+    string = DataGrow(string, 1);
+    
+    string.bytes[string.length - 1] = 0;
+    
+    return string;
+}
+
 String StringNew(const char *str)
 {
     String data = DataNew(str ? (uint32_t)strlen(str) + 1 : 1);
@@ -1793,7 +1805,7 @@ String StringAdd(String string, const char *secondString)
 
     strcpy(string.bytes + oldLen - 1, secondString);
 
-    return string;
+    return StringMutateEnsureNullByte(string);
 }
 
 String StringAddRaw(const char *string, const char *secondString)
@@ -1812,7 +1824,7 @@ String StringPrefix(const char *prefix, String string)
     memmove(string.bytes + strlen(prefix), string.bytes, oldLen);
     memcpy(string.bytes, prefix, strlen(prefix));
 
-    return string;
+    return StringMutateEnsureNullByte(string);
 }
 
 String StringLowercase(String string)
@@ -1822,7 +1834,7 @@ String StringLowercase(String string)
     for(unsigned int i = 0; i < string.length; i++)
         string.bytes[i] = tolower(string.bytes[i]);
 
-    return string;
+    return StringMutateEnsureNullByte(string);
 }
 
 int StringEqual(String string, const char *secondString)
