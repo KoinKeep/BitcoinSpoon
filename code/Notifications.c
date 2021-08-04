@@ -9,10 +9,21 @@ static struct {
     WorkQueue workQueue;
     Datas/*String*/ queuedNotificationNames;
 
-} note = { PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP, PTHREAD_ONCE_INIT, {0}, {0}, {0} };
+} note = { {0}, PTHREAD_ONCE_INIT, {0}, {0}, {0} };
 
 static void init()
 {
+    pthread_mutexattr_t recursiveAttr;
+
+    pthread_mutexattr_init(&recursiveAttr);
+    pthread_mutexattr_settype(&recursiveAttr, PTHREAD_MUTEX_RECURSIVE);
+    
+    if(pthread_mutex_init(&note.mutex, &recursiveAttr) != 0)
+        abort();
+    
+    if(pthread_mutexattr_destroy(&recursiveAttr) != 0)
+        abort();
+    
     note.funcs = DictUntrack(DictNew());
     note.workQueue = WorkQueueNew();
 }

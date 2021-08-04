@@ -70,13 +70,19 @@ NodeManager NodeManagerNew(uint64_t walletCreationDate)
 {
     NodeManager self = { 0 };
 
-    static pthread_mutexattr_t recursiveAttr;
+    pthread_mutexattr_t recursiveAttr;
 
     pthread_mutexattr_init(&recursiveAttr);
     pthread_mutexattr_settype(&recursiveAttr, PTHREAD_MUTEX_RECURSIVE);
 
     self.nodes = DatasNew();
-    pthread_mutex_init(&self.nodesMutex, &recursiveAttr);
+    
+    if(pthread_mutex_init(&self.nodesMutex, &recursiveAttr) != 0)
+        abort();
+    
+    if(pthread_mutexattr_destroy(&recursiveAttr) != 0)
+        abort();
+    
     self.sendTxOnResults = DatasNew();
     self.blockchainSynced = 0;
     self.walletCreationDate = walletCreationDate;

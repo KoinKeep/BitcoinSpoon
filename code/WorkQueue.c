@@ -139,7 +139,7 @@ WorkQueue WorkQueueNew()
     if(pthread_mutex_init(&self.queueLock, 0) != 0)
         abort();
 
-    static pthread_mutexattr_t attr;
+    pthread_mutexattr_t attr;
 
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
