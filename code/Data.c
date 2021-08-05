@@ -53,7 +53,7 @@ static Data DataNewFlexible(unsigned int length, int tracked)
     DATA_LOG("malloc(%d) = %p\n", length, data.bytes);
 
     if(data.bytes)
-        allocatedCount++;
+        __sync_add_and_fetch(&allocatedCount, 1);
 
     // Debug aide -- set fresh memory to 333333 when allocated this way
     memset(data.bytes, 0x33, length);
@@ -279,7 +279,7 @@ static Data DataResizeFlexible(Data data, unsigned int length, int tracked, int 
     DATA_LOG("reallocf(%p, %d, tracked: %d) = %p\n", oldData.bytes, length, tracked, data.bytes);
 
     if(!oldData.bytes && data.bytes)
-        allocatedCount++;
+        __sync_add_and_fetch(&allocatedCount, 1);
 
     // Debug aide -- set memory to 666666 when added view resize.
     if(length > data.length)
@@ -467,8 +467,10 @@ void DataTrackPush()
 
     DATA_LOG("trackStacks-reallocf(%p, %d) = %p\n", oldPtr, (int)(sizeof(Datas) * trackStacks.count), trackStacks.datas);
 
-    if(!oldPtr && trackStacks.datas)
-        allocatedCount++;
+    if(!oldPtr && trackStacks.datas) {
+        
+        __sync_add_and_fetch(&allocatedCount, 1);
+    }
 
     setCurrentTrackStack(DatasNew());
 
@@ -577,7 +579,7 @@ void DataTrackPop()
 
     if(trackStacks.count == 0) {
 
-        allocatedCount--;
+        __sync_sub_and_fetch(&allocatedCount, 1);
 
         DATA_LOG("DataTrack-free(%p)\n", trackStacks.datas);
 
@@ -673,7 +675,7 @@ Data DataFreeFlexible(Data data, int untrack)
     }
 
     if(data.bytes)
-        allocatedCount--;
+        __sync_sub_and_fetch(&allocatedCount, 1);
 
     DATA_LOG("free(%p)\n", data.bytes);
 
