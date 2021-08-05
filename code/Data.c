@@ -467,10 +467,8 @@ void DataTrackPush()
 
     DATA_LOG("trackStacks-reallocf(%p, %d) = %p\n", oldPtr, (int)(sizeof(Datas) * trackStacks.count), trackStacks.datas);
 
-    if(!oldPtr && trackStacks.datas) {
-        
+    if(!oldPtr && trackStacks.datas)
         __sync_add_and_fetch(&allocatedCount, 1);
-    }
 
     setCurrentTrackStack(DatasNew());
 
