@@ -188,7 +188,7 @@ static void *connectionThread(void *ptr)
         NotificationsFire(NodeConnectionStatusChanged, DictNew());
     }
 
-    pthread_cleanup_pop(1)
+    pthread_cleanup_pop(1);
 
     return NULL;
 }
