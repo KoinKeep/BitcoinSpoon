@@ -949,9 +949,6 @@ Data childKeyDerivation(Data hdWallet, uint32_t index)
         if(!newKey.bytes)
             return DTPop(childKeyDerivation(hdWallet, index + 1));
 
-        // Compress public key
-        newKey = publicKeyCompress(publicKeyParse(newKey));
-
         BTCUTILAssert(newKey.length == 33);
 
         memcpy(ptr + 4 + 1 + 4 + 4, ((uint8_t*)hash.bytes) + 32, 32);
