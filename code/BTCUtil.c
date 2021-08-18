@@ -796,9 +796,6 @@ Data hdWallet(Data hdWallet, const char *path)
 
 Data privKeyToHdWallet(Data privKey, const char *passphrase) {
 
-    if (passphrase == "")
-        passphrase = NULL;
-
     Data seedPhrase = DataCopy("Bitcoin seed", strlen("Bitcoin seed"));
 
     Data seed = PBKDF2(toMnemonic(privKey).bytes, passphrase);
