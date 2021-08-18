@@ -81,7 +81,7 @@ Datas pubKeysFromHdWallets(Datas hdWallets);
 
 Data hdWallet(Data hdWallet, const char *path);
 
-Data privKeyToHdWallet(Data privKey, char *passphrase);
+Data privKeyToHdWallet(Data privKey, const char *passphrase);
 
 // Returns an array of uint32_t indices (stored in Datas) for 'path'.
 Datas ckdIndicesFromPath(const char *path);
