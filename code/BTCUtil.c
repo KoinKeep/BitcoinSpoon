@@ -794,6 +794,21 @@ Data hdWallet(Data hdWallet, const char *path)
     return DTPop(hdWallet);
 }
 
+Data privKeyToHdWallet(Data privKey, char *passphrase) {
+
+    if (passphrase == "") {
+        passphrase = NULL;
+    }
+
+    Data seedPhrase = DataCopy("Bitcoin seed", strlen("Bitcoin seed"));
+
+    Data seed = PBKDF2(toMnemonic(privKey).bytes, passphrase);
+
+    Data hash = hmacSha512(seedPhrase, seed);
+
+    return hdWalletPriv(DataCopyDataPart(hash, 0, 32), DataCopyDataPart(hash, 32, 32));
+}
+
 Data chainCodeFromHdWallet(Data hdWallet)
 {
     BTCUTILAssert(hdWallet.length == 82);
