@@ -794,11 +794,10 @@ Data hdWallet(Data hdWallet, const char *path)
     return DTPop(hdWallet);
 }
 
-Data privKeyToHdWallet(Data privKey, char *passphrase) {
+Data privKeyToHdWallet(Data privKey, const char *passphrase) {
 
-    if (passphrase == "") {
+    if (passphrase == "")
         passphrase = NULL;
-    }
 
     Data seedPhrase = DataCopy("Bitcoin seed", strlen("Bitcoin seed"));
 
