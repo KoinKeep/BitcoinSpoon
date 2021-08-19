@@ -79,6 +79,8 @@ Data chainCodeFromHdWallet(Data hdWallet);
 
 Datas pubKeysFromHdWallets(Datas hdWallets);
 
+Data privKeyToHdWallet(Data privKey, const char *passphrase);
+
 Data hdWallet(Data hdWallet, const char *path);
 
 // Returns an array of uint32_t indices (stored in Datas) for 'path'.
