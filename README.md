@@ -2,7 +2,7 @@
 
 Bitcoin Spoon is a lightweight Bitcoin library that has minimal dependencies.
 
-Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon was written from scratch to run on more limited hardware.
+Why Bitcoin Spoon? Because a spoon is not a fork. Bitcoin Spoon was written to run on more limited hardware.
 
 * Compile with ./compile.sh
 * Test by running ./test/test
