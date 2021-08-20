@@ -793,7 +793,7 @@ Data privKeyToHdWallet(Data privKey, const char *passphrase)
 
     Data hash = hmacSha512(seedPhrase, seed);
     
-    BTCUtilAssert(hash.length == 64);
+    BTCUTILAssert(hash.length == 64);
 
     if(hash.length != 64)
         return DTPopNull();
