@@ -780,6 +780,29 @@ Datas ckdIndicesFromPath(const char *cStr)
     return DTPopDatas(result);
 }
 
+Data privKeyToHdWallet(Data privKey, const char *passphrase)
+{
+    DataTrackPush();
+    
+    if(toMnemonic(privKey).bytes == NULL)
+        return DTPopNull();
+    
+    Data seedPhrase = DataCopy("Bitcoin seed", strlen("Bitcoin seed"));
+    
+    Data seed = PBKDF2(toMnemonic(privKey).bytes, passphrase);
+
+    Data hash = hmacSha512(seedPhrase, seed);
+    
+    BTCUTILAssert(hash.length == 64);
+
+    if(hash.length != 64)
+        return DTPopNull();
+
+    Data result = hdWalletPriv(DataCopyDataPart(hash, 0, 32), DataCopyDataPart(hash, 32, 32));
+    
+    return DTPop(result);
+}
+
 Data hdWallet(Data hdWallet, const char *path)
 {
     DataTrackPush();
