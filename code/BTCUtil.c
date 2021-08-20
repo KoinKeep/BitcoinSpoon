@@ -798,9 +798,9 @@ Data privKeyToHdWallet(Data privKey, const char *passphrase)
     if(hash.length != 64)
         return DTPopNull();
 
-    Data hdWallet = hdWalletPriv(DataCopyDataPart(hash, 0, 32), DataCopyDataPart(hash, 32, 32));
+    Data result = hdWalletPriv(DataCopyDataPart(hash, 0, 32), DataCopyDataPart(hash, 32, 32));
     
-    return DTPop(hdWallet);
+    return DTPop(result);
 }
 
 Data hdWallet(Data hdWallet, const char *path)
