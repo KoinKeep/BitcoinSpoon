@@ -784,10 +784,10 @@ Data privKeyToHdWallet(Data privKey, const char *passphrase)
 {
     DataTrackPush();
     
-    Data seedPhrase = DataCopy("Bitcoin seed", strlen("Bitcoin seed"));
-    
     if(toMnemonic(privKey).bytes == NULL)
         return DTPopNull();
+    
+    Data seedPhrase = DataCopy("Bitcoin seed", strlen("Bitcoin seed"));
     
     Data seed = PBKDF2(toMnemonic(privKey).bytes, passphrase);
 
