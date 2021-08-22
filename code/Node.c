@@ -478,7 +478,7 @@ static int processVersionAndOutputBuffer(Node *self)
 
         errno = 0;
 
-        ssize_t result = send(self->connection, self->versionPacket.bytes, self->versionPacket.length, 0);
+        ssize_t result = send(self->connection, self->versionPacket.bytes, self->versionPacket.length, MSG_NOSIGNAL);
 
         if(result < 0) {
 
@@ -512,7 +512,7 @@ static int processVersionAndOutputBuffer(Node *self)
 
         errno = 0;
 
-        ssize_t result = send(self->connection, self->outputBuffer.bytes, self->outputBuffer.length, 0);
+        ssize_t result = send(self->connection, self->outputBuffer.bytes, self->outputBuffer.length, MSG_NOSIGNAL);
 
         if(result < 0) {
 
