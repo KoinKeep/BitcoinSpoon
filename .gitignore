@@ -8,3 +8,6 @@ Mac/BitcoinSpoon.xcodeproj/project.xcworkspace/xcuserdata
 /Untitled.xcworkspace/xcuserdata
 libraries/secp256k1/src/*.o.tmp
 code/objects/*.o.tmp
+.DS_Store
+*.dSYM
+/test/webserver_example
