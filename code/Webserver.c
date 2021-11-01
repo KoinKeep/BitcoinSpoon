@@ -339,7 +339,7 @@ WebserverClient *WebserverWaitForClient(Webserver *webserver, int waitMillisecon
 
                 int fd = webserver->pendingClients[i]->clientSocket;
 
-                if(FD_ISSET(webserver->serverSocket, &read)) {
+                if(FD_ISSET(fd, &read)) {
 
                     if(0 != ProcessClientRead(client)) {
 
@@ -352,7 +352,7 @@ WebserverClient *WebserverWaitForClient(Webserver *webserver, int waitMillisecon
                     }
                 }
 
-                if(FD_ISSET(webserver->serverSocket, &except)) {
+                if(FD_ISSET(fd, &except)) {
 
                     printf("Removing client %d due to exception.\n", i);
 
