@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/ddustin/Development/bitcoinspoon/fast_compile.sh">
+      location = "group:fast_compile.sh">
    </FileRef>
    <FileRef
       location = "group:README.md">
