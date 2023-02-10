@@ -1151,6 +1151,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
+				MACOSX_DEPLOYMENT_TARGET = " ";
 				OTHER_CFLAGS = "-Ilibraries/libsecp256k1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "-Wno-strict-prototypes";
@@ -1162,6 +1163,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
+				MACOSX_DEPLOYMENT_TARGET = " ";
 				OTHER_CFLAGS = "-Ilibraries/libsecp256k1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "-Wno-strict-prototypes";
@@ -1173,6 +1175,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
+				MACOSX_DEPLOYMENT_TARGET = " ";
 				OTHER_CFLAGS = "-Ilibraries/libsecp256k1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "-Wno-strict-prototypes";
@@ -1184,6 +1187,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
+				MACOSX_DEPLOYMENT_TARGET = " ";
 				OTHER_CFLAGS = "-Ilibraries/libsecp256k1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "-Wno-strict-prototypes";
@@ -1302,6 +1306,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
+				MACOSX_DEPLOYMENT_TARGET = " ";
 				OTHER_CFLAGS = "-Ilibraries/libsecp256k1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "-Wno-strict-prototypes";
@@ -1313,6 +1318,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
+				MACOSX_DEPLOYMENT_TARGET = " ";
 				OTHER_CFLAGS = "-Ilibraries/libsecp256k1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WARNING_CFLAGS = "-Wno-strict-prototypes";
