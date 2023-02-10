@@ -11,3 +11,5 @@ code/objects/*.o.tmp
 .DS_Store
 *.dSYM
 /test/webserver_example
+BitcoinSpoon.xcworkspace/xcuserdata/
+
