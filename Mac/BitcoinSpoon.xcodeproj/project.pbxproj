@@ -140,7 +140,7 @@
 		587B059923DF746F00FB8B77 /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = test.c; path = ../../test/test.c; sourceTree = "<group>"; };
 		587B059B23DF792700FB8B77 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		587B05C323DF794000FB8B77 /* bitcoinSpoon */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bitcoinSpoon; sourceTree = BUILT_PRODUCTS_DIR; };
-		587B05C923E11F4300FB8B77 /* README.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = README.m; path = ../README.m; sourceTree = "<group>"; };
+		587B05C923E11F4300FB8B77 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		58D4BDDA23DE098800EF46A3 /* example */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = example; sourceTree = BUILT_PRODUCTS_DIR; };
 		58D4BDE423DE0A0400EF46A3 /* example.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = example.c; path = ../../test/example.c; sourceTree = "<group>"; };
 		58D4BDE723DE0A0F00EF46A3 /* TransactionTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTracker.h; sourceTree = "<group>"; };
@@ -401,7 +401,7 @@
 		58D4BDD123DE098800EF46A3 = {
 			isa = PBXGroup;
 			children = (
-				587B05C923E11F4300FB8B77 /* README.m */,
+				587B05C923E11F4300FB8B77 /* README.md */,
 				58D4BDDC23DE098800EF46A3 /* BitcoinSpoon */,
 				58D4BDDB23DE098800EF46A3 /* Products */,
 			);
