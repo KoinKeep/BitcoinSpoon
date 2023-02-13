@@ -478,7 +478,15 @@ static int processVersionAndOutputBuffer(Node *self)
 
         errno = 0;
 
+#   if defined(MSG_NOSIGNAL)
+        // Use flag NOSIGNAL on send call
+        // NodeLog("MSG_NOSIGNAL defined");
         ssize_t result = send(self->connection, self->versionPacket.bytes, self->versionPacket.length, MSG_NOSIGNAL);
+#   else
+        const long long int set = 1;
+        NodeLog("MSG_NOSIGNAL NOT defined");
+        ssize_t result = send(self->connection, self->versionPacket.bytes, self->versionPacket.length, sizeof(set));
+#   endif
 
         if(result < 0) {
 
@@ -512,7 +520,15 @@ static int processVersionAndOutputBuffer(Node *self)
 
         errno = 0;
 
-        ssize_t result = send(self->connection, self->outputBuffer.bytes, self->outputBuffer.length, MSG_NOSIGNAL);
+#   if defined(MSG_NOSIGNAL)
+        // Use flag NOSIGNAL on send call
+        // NodeLog("MSG_NOSIGNAL defined");
+        ssize_t result = send(self->connection, self->versionPacket.bytes, self->versionPacket.length, MSG_NOSIGNAL);
+#   else
+        NodeLog("MSG_NOSIGNAL NOT defined");
+        const long long int set = 1;
+        ssize_t result = send(self->connection, self->versionPacket.bytes, self->versionPacket.length, sizeof(set));
+#   endif
 
         if(result < 0) {
 
