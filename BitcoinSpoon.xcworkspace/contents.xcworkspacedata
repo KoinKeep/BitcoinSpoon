@@ -13,13 +13,4 @@
    <FileRef
       location = "group:compile.sh">
    </FileRef>
-   <FileRef
-      location = "group:code">
-   </FileRef>
-   <FileRef
-      location = "group:libraries">
-   </FileRef>
-   <FileRef
-      location = "group:test">
-   </FileRef>
 </Workspace>
