@@ -150,7 +150,9 @@ static void *testWorkQueueThread(void *arg)
 {
     WorkQueue *workQueue = arg;
 
-    WorkQueueExecuteAll(arg);
+    printf("WorkQueueExecuteAll(workQueue);\n");
+    WorkQueueExecuteAll(workQueue);
+    //WorkQueueExecuteAll(arg);
 
     return NULL;
 }
