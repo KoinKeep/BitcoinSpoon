@@ -664,7 +664,7 @@ static int processTransactionStr(const char *transactionStr, int onlyIfValid)
                         printf("1) Run again adding the -database parameter (if the funding transaction has been previously saved).\n");
                         printf("2) Run again but adding parameters -node and -walletCreationTime 1579094852 where 1579094852 is the unix time of the funding transaction (or earlier). This will connect to the bitcoin network searching for the funding transaction(s), saving them, and quiting when found.\n");
                         printf("3) Find the transaction and add it manually with -addFundingTransaction ABCD where ABCD is the transaction in hex. The transaction identifier is %s.\n", toHex(DataFlipEndianCopy(input->previousTransactionHash)).bytes);
-                        printf("4) If you are an advanced user, you can lookup the funding transaciton amount manually. The output index is %d.\n\n", input->outputIndex);
+                        printf("4) If you are an advanced user, you can lookup the funding transaction amount manually. The output index is %d.\n\n", input->outputIndex);
                     }
 
                     warnings++;
@@ -685,7 +685,7 @@ static int processTransactionStr(const char *transactionStr, int onlyIfValid)
                     printf("However since balance it is not coming from an owned address, this is only a notice and not a warning.\n");
                     printf("Possible remedies are:\n");
                     printf("1) Find the transaction and add it manually with -addFundingTransaction ABCD where ABCD is the transaction in hex. The transaction identifier is %s.\n", toHex(DataFlipEndianCopy(input->previousTransactionHash)).bytes);
-                    printf("2) If you are an advanced user, you can lookup the funding transaciton amount manually. The output index is %d.\n\n", input->outputIndex);
+                    printf("2) If you are an advanced user, you can lookup the funding transaction amount manually. The output index is %d.\n\n", input->outputIndex);
 
                     externalWithdrawlAmount = -1;
                 }

@@ -106,7 +106,7 @@ Datas/*Data*/ TTMissingFundingTransactions(TransactionTracker *self);
 
 Datas/*Data*/ TTInterestingTransactionHashes(TransactionTracker *self);
 
-int TTInterestingTransaction(TransactionTracker *self, Transaction *transaciton);
+int TTInterestingTransaction(TransactionTracker *self, Transaction *transaction);
 
 // Does not update failure rate.
 int TTInterestingInput(TransactionTracker *self, TransactionInput *input);
